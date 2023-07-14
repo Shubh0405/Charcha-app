@@ -1,8 +1,11 @@
-import 'package:charcha/screen/home_page.dart';
+import 'package:charcha/app_init.dart';
 import 'package:charcha/theme/theme.dart';
+import 'package:charcha/utils/globals.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-void main() {
+void main() async {
+  await dotenv.load(fileName: '.env');
   runApp(const MyApp());
 }
 
@@ -15,6 +18,7 @@ class MyApp extends StatelessWidget {
         themeMode: ThemeMode.light,
         theme: MyThemes.lightTheme,
         darkTheme: MyThemes.darkTheme,
-        home: const HomePage());
+        scaffoldMessengerKey: snackbarKey,
+        home: const AppInit());
   }
 }

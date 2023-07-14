@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -8,7 +9,7 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       body: Center(
           child: Text(
-        'Home Page !!!',
+        dotenv.env['BASE_URL']!,
         style: Theme.of(context)
             .textTheme
             .titleSmall
