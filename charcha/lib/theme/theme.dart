@@ -5,6 +5,7 @@ class MyThemes {
   static ThemeData lightTheme = ThemeData(
     fontFamily: GoogleFonts.lato().fontFamily,
     scaffoldBackgroundColor: Colors.white,
+    shadowColor: Color.fromARGB(255, 201, 198, 198),
     colorScheme: const ColorScheme(
         brightness: Brightness.light,
         primary: Color.fromRGBO(74, 90, 223, 1),
