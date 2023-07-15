@@ -6,9 +6,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 enum AuthStatus { authenticated, unauthenticated, unknown }
 
 class AuthBloc extends Cubit<AuthStatus> {
-  final AuthRepository authRepository;
+  // final AuthRepository authRepository;
 
-  AuthBloc(this.authRepository) : super(AuthStatus.unknown);
+  AuthBloc() : super(AuthStatus.unknown);
 
   void checkAuthStatus() async {
     final prefs = await SharedPreferences.getInstance();
@@ -24,14 +24,22 @@ class AuthBloc extends Cubit<AuthStatus> {
 
   Future<void> login(String username, String password) async {
     emit(AuthStatus.unknown);
-    print("Inside AuthBloc login function");
     try {
-      await authRepository.login(username, password);
-      print("Login Successful!");
+      await AuthRepository.login(username, password);
       emit(AuthStatus.authenticated);
     } catch (e) {
-      print(e);
       emit(AuthStatus.unauthenticated);
+      throw Exception(e.toString());
+    }
+  }
+
+  Future<void> logout() async {
+    emit(AuthStatus.unknown);
+    try {
+      await AuthRepository.logout();
+      emit(AuthStatus.unauthenticated);
+    } catch (e) {
+      emit(AuthStatus.authenticated);
       throw Exception(e.toString());
     }
   }

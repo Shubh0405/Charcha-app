@@ -1,14 +1,16 @@
+import 'dart:ffi';
+
 import 'package:charcha/services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthRepository {
-  final AuthService authService;
+  // final AuthService authService;
 
-  AuthRepository(this.authService);
+  AuthRepository();
 
-  Future<void> login(String email, String password) async {
-    final response = await authService.login(email, password);
+  static Future<void> login(String email, String password) async {
+    final response = await AuthService.login(email, password);
 
     print("Inside Auth Repository");
     print(response);
@@ -19,5 +21,30 @@ class AuthRepository {
     final prefs = await SharedPreferences.getInstance();
     prefs.setString("access_token", access_token);
     prefs.setString("refresh_token", refresh_token);
+  }
+
+  static Future<void> logout() async {
+    final prefs = await SharedPreferences.getInstance();
+    final refreshToken = prefs.getString("refresh_token");
+
+    await AuthService.logout(refreshToken!);
+
+    prefs.remove('access_token');
+    prefs.remove('refresh_token');
+  }
+
+  static Future<bool> newAccessToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    final refreshToken = prefs.getString("refresh_token");
+
+    final response = await AuthService.getNewAccessToken(refreshToken!);
+
+    if (response["validRefresh"]) {
+      final accessToken =
+          prefs.setString('access_token', response["accessToken"]);
+      return true;
+    } else {
+      return false;
+    }
   }
 }

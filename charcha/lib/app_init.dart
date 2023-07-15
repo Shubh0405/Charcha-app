@@ -14,14 +14,14 @@ class AppInit extends StatefulWidget {
 }
 
 class _AppInitState extends State<AppInit> {
-  final AuthRepository authRepository = AuthRepository(AuthService());
+  // final AuthRepository authRepository = AuthRepository(AuthService());
 
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
         providers: [
           BlocProvider<AuthBloc>(
-            create: (context) => AuthBloc(authRepository)..checkAuthStatus(),
+            create: (context) => AuthBloc()..checkAuthStatus(),
           )
         ],
         child: BlocBuilder<AuthBloc, AuthStatus>(
