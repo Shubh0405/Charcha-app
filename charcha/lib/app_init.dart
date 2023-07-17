@@ -1,6 +1,7 @@
 import 'package:charcha/cubits/auth_cubit.dart';
 import 'package:charcha/repository/auth_repository.dart';
 import 'package:charcha/screen/click_email.dart';
+import 'package:charcha/screen/enter_email.dart';
 import 'package:charcha/screen/home_page.dart';
 import 'package:charcha/services/auth_service.dart';
 import 'package:flutter/material.dart';
@@ -29,7 +30,7 @@ class _AppInitState extends State<AppInit> {
             if (state == AuthStatus.authenticated) {
               return HomePage();
             } else if (state == AuthStatus.unauthenticated) {
-              return ClickEmailScreen();
+              return EnterEmailScreen();
             } else {
               return Scaffold(
                 body: Center(child: CircularProgressIndicator()),

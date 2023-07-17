@@ -11,7 +11,7 @@ class MyThemes {
         primary: Color.fromRGBO(74, 90, 223, 1),
         onPrimary: Colors.white,
         secondary: Color.fromRGBO(25, 59, 83, 0.5),
-        onSecondary: Colors.white,
+        onSecondary: Color.fromRGBO(204, 216, 223, 0.5),
         error: Colors.red,
         onError: Colors.red,
         background: Colors.white,
@@ -24,7 +24,7 @@ class MyThemes {
         titleSmall: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
         bodyLarge: TextStyle(fontSize: 20),
         bodyMedium: TextStyle(fontSize: 15),
-        labelLarge: TextStyle(fontSize: 12)),
+        bodySmall: TextStyle(fontSize: 12)),
   );
 
   static ThemeData darkTheme = lightTheme.copyWith(
