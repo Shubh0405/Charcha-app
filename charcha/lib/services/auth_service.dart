@@ -61,4 +61,23 @@ class AuthService {
 
     return response;
   }
+
+  static Future<Map<String, dynamic>> checkEmailExists(String email) async {
+    dynamic response;
+
+    try {
+      response =
+          await http.get(Uri.parse('$baseUrl/auth/checkEmail?email=$email'));
+    } catch (e) {
+      throw Exception('Some error occured!');
+    }
+
+    final jsonDecoded = json.decode(response.body);
+
+    if (response.statusCode == 200) {
+      return jsonDecoded;
+    } else {
+      throw Exception('Some error occured!');
+    }
+  }
 }

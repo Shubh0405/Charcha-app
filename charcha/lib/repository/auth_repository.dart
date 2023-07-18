@@ -12,9 +12,6 @@ class AuthRepository {
   static Future<void> login(String email, String password) async {
     final response = await AuthService.login(email, password);
 
-    print("Inside Auth Repository");
-    print(response);
-
     final access_token = response["data"]["accessToken"];
     final refresh_token = response["data"]["refreshToken"];
 
@@ -42,6 +39,18 @@ class AuthRepository {
     if (response["validRefresh"]) {
       final accessToken =
           prefs.setString('access_token', response["accessToken"]);
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  static Future<bool> checkIfEmailExists(String email) async {
+    final response = await AuthService.checkEmailExists(email);
+
+    print(response);
+
+    if (response["data"]["emailInUse"]) {
       return true;
     } else {
       return false;

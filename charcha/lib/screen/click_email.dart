@@ -1,4 +1,5 @@
 import 'package:charcha/cubits/auth_cubit.dart';
+import 'package:charcha/screen/enter_email.dart';
 import 'package:charcha/screen/home_page.dart';
 import 'package:charcha/utils/globals.dart';
 import 'package:flutter/material.dart';
@@ -135,17 +136,25 @@ class ClickEmailScreen extends StatelessWidget {
                 padding: const EdgeInsets.only(left: 30, right: 30, top: 50),
                 child: Align(
                   alignment: Alignment.topCenter,
-                  child: Container(
-                    width: double.infinity,
-                    // height: deviceHeight * 0.1,
-                    padding: const EdgeInsets.all(15),
-                    decoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.secondary,
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(10))),
-                    child: Text(
-                      'Click here to charcha',
-                      style: TextStyle(color: Theme.of(context).shadowColor),
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const EnterEmailScreen()));
+                    },
+                    child: Container(
+                      width: double.infinity,
+                      // height: deviceHeight * 0.1,
+                      padding: const EdgeInsets.all(15),
+                      decoration: BoxDecoration(
+                          color: Theme.of(context).colorScheme.secondary,
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(10))),
+                      child: Text(
+                        'Click here to charcha',
+                        style: TextStyle(color: Theme.of(context).shadowColor),
+                      ),
                     ),
                   ),
                 ),

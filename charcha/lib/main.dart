@@ -1,8 +1,12 @@
-import 'package:charcha/app_init.dart';
+import 'package:charcha/screen/click_email.dart';
+import 'package:charcha/screen/home_page.dart';
 import 'package:charcha/theme/theme.dart';
 import 'package:charcha/utils/globals.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+
+import 'cubits/auth_cubit.dart';
 
 void main() async {
   await dotenv.load(fileName: '.env');
@@ -11,14 +15,43 @@ void main() async {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
+  // @override
+  // Widget build(BuildContext context) {
+  //   return MaterialApp(
+  //       title: 'Flutter Demo',
+  //       themeMode: ThemeMode.light,
+  //       theme: MyThemes.lightTheme,
+  //       darkTheme: MyThemes.darkTheme,
+  //       scaffoldMessengerKey: snackbarKey,
+  //       home: const AppInit());
+  // }
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        title: 'Flutter Demo',
-        themeMode: ThemeMode.light,
-        theme: MyThemes.lightTheme,
-        darkTheme: MyThemes.darkTheme,
-        scaffoldMessengerKey: snackbarKey,
-        home: const AppInit());
+    return MultiBlocProvider(
+        providers: [
+          BlocProvider<AuthBloc>(
+            create: (context) => AuthBloc()..checkAuthStatus(),
+          )
+        ],
+        child: BlocBuilder<AuthBloc, AuthStatus>(
+          builder: (context, state) {
+            Widget initWidget;
+
+            if (state == AuthStatus.authenticated) {
+              initWidget = const HomePage();
+            } else {
+              initWidget = const ClickEmailScreen();
+            }
+
+            return MaterialApp(
+                title: 'Flutter Demo',
+                themeMode: ThemeMode.light,
+                theme: MyThemes.lightTheme,
+                darkTheme: MyThemes.darkTheme,
+                scaffoldMessengerKey: snackbarKey,
+                home: initWidget);
+          },
+        ));
   }
 }
