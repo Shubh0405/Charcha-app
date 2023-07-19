@@ -65,7 +65,16 @@ class _EnterEmailScreenState extends State<EnterEmailScreen> {
     }
 
     // function call bloc
-    await BlocProvider.of<AuthBloc>(context).checkIfEmailExists(enteredEmail);
+    try {
+      await BlocProvider.of<AuthBloc>(context).checkIfEmailExists(enteredEmail);
+    } catch (e) {
+      snackbarKey.currentState?.showSnackBar(
+        const SnackBar(
+          content: Text("Some error occured! Please try again later"),
+        ),
+      );
+      return;
+    }
 
     print(enteredEmail);
   }

@@ -1,5 +1,6 @@
 import 'package:charcha/screen/click_email.dart';
 import 'package:charcha/screen/home_page.dart';
+import 'package:charcha/screen/password_screen.dart';
 import 'package:charcha/theme/theme.dart';
 import 'package:charcha/utils/globals.dart';
 import 'package:flutter/material.dart';
@@ -41,7 +42,9 @@ class MyApp extends StatelessWidget {
             if (state == AuthStatus.authenticated) {
               initWidget = const HomePage();
             } else {
-              initWidget = const ClickEmailScreen();
+              // initWidget = const ClickEmailScreen();
+              initWidget = const PasswordScreen(
+                  email: 'shubhngupta04@gmail.com', isLogin: true);
             }
 
             return MaterialApp(
