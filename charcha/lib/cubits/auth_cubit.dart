@@ -33,10 +33,12 @@ class AuthBloc extends Cubit<AuthStatus> {
 
   Future<void> login(String username, String password) async {
     try {
-      await AuthRepository.login(username, password);
-      print("Login Successful!");
-      emit(AuthStatus.authenticated);
-      print("Authenticated state emitted!");
+      final loginResponse = await AuthRepository.login(username, password);
+      if (loginResponse["Profile"]!) {
+        emit(AuthStatus.authenticated);
+      } else {
+        // Create Profile state.
+      }
     } catch (e) {
       throw Exception(e.toString());
     }

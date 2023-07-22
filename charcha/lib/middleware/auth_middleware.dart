@@ -1,5 +1,6 @@
 import 'package:charcha/cubits/auth_cubit.dart';
 import 'package:charcha/repository/auth_repository.dart';
+import 'package:charcha/res/shared_preferences_strings.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -60,8 +61,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 // }
 
 class AuthMiddleware {
-  static const String _accessTokenKey = 'access_token';
-  static const String _refreshTokenKey = 'refresh_token';
+  static final String _accessTokenKey = prefs_string_access_token;
+  static final String _refreshTokenKey = prefs_string_refresh_token;
   // final AuthRepository authRepository;
   // final AuthBloc authBloc;
 
