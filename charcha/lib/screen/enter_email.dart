@@ -1,4 +1,4 @@
-import 'package:charcha/cubits/auth_cubit.dart';
+import 'package:charcha/cubits/user_cubit.dart';
 import 'package:charcha/screen/password_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -66,7 +66,7 @@ class _EnterEmailScreenState extends State<EnterEmailScreen> {
 
     // function call bloc
     try {
-      await BlocProvider.of<AuthBloc>(context).checkIfEmailExists(enteredEmail);
+      await BlocProvider.of<UserBloc>(context).checkIfEmailExists(enteredEmail);
     } catch (e) {
       snackbarKey.currentState?.showSnackBar(
         const SnackBar(
@@ -86,21 +86,21 @@ class _EnterEmailScreenState extends State<EnterEmailScreen> {
 
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.primary,
-      body: BlocConsumer<AuthBloc, AuthStatus>(
+      body: BlocConsumer<UserBloc, UserStatus>(
         listener: (context, state) {
-          if (state == AuthStatus.userLogin) {
+          if (state == UserStatus.userLogin) {
             Navigator.push(
                 context,
                 MaterialPageRoute(
                     builder: (context) => PasswordScreen(
                         email: _emailController.text, isLogin: true)));
-          } else if (state == AuthStatus.userRegister) {
+          } else if (state == UserStatus.userRegister) {
             Navigator.push(
                 context,
                 MaterialPageRoute(
                     builder: (context) => PasswordScreen(
                         email: _emailController.text, isLogin: false)));
-          } else if (state == AuthStatus.unauthenticated) {
+          } else if (state == UserStatus.error) {
             snackbarKey.currentState?.showSnackBar(
               const SnackBar(
                 content: Text("Some error occured! Please try again!"),

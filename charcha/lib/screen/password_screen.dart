@@ -1,4 +1,10 @@
+import 'package:charcha/cubits/auth_cubit.dart';
+import 'package:charcha/cubits/user_cubit.dart';
+import 'package:charcha/res/error_messages.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../utils/globals.dart';
 
 class PasswordScreen extends StatefulWidget {
   final String email;
@@ -38,7 +44,7 @@ class _PasswordScreenState extends State<PasswordScreen> {
     });
   }
 
-  void _submitPassword(BuildContext context) {
+  void _submitPassword(BuildContext context) async {
     String password = _passwordController.text;
     String confirmPassword = _confirmPasswordController.text;
 
@@ -93,6 +99,31 @@ class _PasswordScreenState extends State<PasswordScreen> {
         return;
       }
     }
+
+    if (widget.isLogin) {
+      try {
+        await BlocProvider.of<AuthBloc>(context).login(widget.email, password);
+      } catch (e) {
+        final errorMessage = e.toString().replaceAll('Exception:', '').trim();
+
+        print(errorMessage);
+
+        if (errorMessage == login_wrong_credentials) {
+          setState(() {
+            passwordFieldError = "Invalid Password!";
+          });
+        } else {
+          snackbarKey.currentState?.showSnackBar(
+            const SnackBar(
+              content: Text("Some error occured! Please try again later"),
+            ),
+          );
+        }
+      }
+    }
+
+    Navigator.of(context).pop();
+    Navigator.of(context).pop();
   }
 
   @override
@@ -102,6 +133,20 @@ class _PasswordScreenState extends State<PasswordScreen> {
 
     return Scaffold(
         backgroundColor: Theme.of(context).colorScheme.primary,
+        appBar: AppBar(
+          shadowColor: Colors.transparent,
+          leading: Padding(
+            padding: const EdgeInsets.all(15.0),
+            child: IconButton(
+                onPressed: () {
+                  BlocProvider.of<UserBloc>(context).passwordScreenBackClick();
+                  Navigator.of(context).pop();
+                },
+                splashColor: Colors.transparent,
+                highlightColor: Colors.transparent,
+                icon: Icon(Icons.arrow_back_ios)),
+          ),
+        ),
         body: SingleChildScrollView(
           child: Padding(
             padding: EdgeInsets.only(top: safeAreaHeight),
@@ -110,8 +155,8 @@ class _PasswordScreenState extends State<PasswordScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  SizedBox(
-                    height: deviceHeight * 0.1,
+                  const SizedBox(
+                    height: 20,
                   ),
                   Text(
                     widget.isLogin ? 'Welcome Back' : 'Welcome',

@@ -1,5 +1,4 @@
 import 'package:charcha/repository/auth_repository.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -28,13 +27,17 @@ class AuthBloc extends Cubit<AuthStatus> {
     }
   }
 
-  Future<void> login(String username, String password) async {
+  void passwordScreenBackClick() async {
     emit(AuthStatus.unknown);
+  }
+
+  Future<void> login(String username, String password) async {
     try {
       await AuthRepository.login(username, password);
+      print("Login Successful!");
       emit(AuthStatus.authenticated);
+      print("Authenticated state emitted!");
     } catch (e) {
-      emit(AuthStatus.unauthenticated);
       throw Exception(e.toString());
     }
   }

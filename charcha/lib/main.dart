@@ -1,3 +1,4 @@
+import 'package:charcha/cubits/user_cubit.dart';
 import 'package:charcha/screen/click_email.dart';
 import 'package:charcha/screen/home_page.dart';
 import 'package:charcha/screen/password_screen.dart';
@@ -14,26 +15,22 @@ void main() async {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
-  // @override
-  // Widget build(BuildContext context) {
-  //   return MaterialApp(
-  //       title: 'Flutter Demo',
-  //       themeMode: ThemeMode.light,
-  //       theme: MyThemes.lightTheme,
-  //       darkTheme: MyThemes.darkTheme,
-  //       scaffoldMessengerKey: snackbarKey,
-  //       home: const AppInit());
-  // }
 
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
         providers: [
           BlocProvider<AuthBloc>(
             create: (context) => AuthBloc()..checkAuthStatus(),
-          )
+          ),
+          BlocProvider<UserBloc>(create: (context) => UserBloc())
         ],
         child: BlocBuilder<AuthBloc, AuthStatus>(
           builder: (context, state) {
@@ -42,9 +39,7 @@ class MyApp extends StatelessWidget {
             if (state == AuthStatus.authenticated) {
               initWidget = const HomePage();
             } else {
-              // initWidget = const ClickEmailScreen();
-              initWidget = const PasswordScreen(
-                  email: 'shubhngupta04@gmail.com', isLogin: true);
+              initWidget = const ClickEmailScreen();
             }
 
             return MaterialApp(
