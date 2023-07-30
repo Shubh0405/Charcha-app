@@ -16,7 +16,7 @@ class MyThemes {
         onError: Colors.red,
         background: Colors.white,
         onBackground: Colors.black,
-        surface: Color.fromRGBO(204, 216, 223, 1),
+        surface: Color.fromRGBO(217, 222, 224, 1),
         onSurface: Colors.black),
     textTheme: const TextTheme(
         titleLarge: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
@@ -28,7 +28,7 @@ class MyThemes {
   );
 
   static ThemeData darkTheme = lightTheme.copyWith(
-      scaffoldBackgroundColor: Color.fromARGB(23, 45, 56, 1),
+      scaffoldBackgroundColor: Colors.black,
       colorScheme: lightTheme.colorScheme.copyWith(
           background: const Color.fromRGBO(23, 45, 56, 1),
           onBackground: Colors.white,

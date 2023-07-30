@@ -1,7 +1,6 @@
 import 'package:charcha/cubits/user_cubit.dart';
 import 'package:charcha/screen/click_email.dart';
 import 'package:charcha/screen/home_page.dart';
-import 'package:charcha/screen/password_screen.dart';
 import 'package:charcha/theme/theme.dart';
 import 'package:charcha/utils/globals.dart';
 import 'package:flutter/material.dart';
@@ -44,7 +43,7 @@ class _MyAppState extends State<MyApp> {
 
             return MaterialApp(
                 title: 'Flutter Demo',
-                themeMode: ThemeMode.light,
+                themeMode: ThemeMode.dark,
                 theme: MyThemes.lightTheme,
                 darkTheme: MyThemes.darkTheme,
                 scaffoldMessengerKey: snackbarKey,

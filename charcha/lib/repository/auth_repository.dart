@@ -1,8 +1,5 @@
-import 'dart:ffi';
-
 import 'package:charcha/res/shared_preferences_strings.dart';
 import 'package:charcha/services/auth_service.dart';
-import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthRepository {

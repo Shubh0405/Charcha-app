@@ -10,7 +10,7 @@ class UserService {
 
   UserService();
 
-  static Future<void> searchUser(String username) async {
+  static Future<dynamic> searchUser(String username) async {
     final http.Request request = http.Request(
       'GET',
       Uri.parse('$baseUrl/users/profile?username=$username'),
@@ -21,6 +21,6 @@ class UserService {
 
     final decodedResponse = await http.Response.fromStream(response);
 
-    print(json.decode(decodedResponse.body));
+    return json.decode(decodedResponse.body);
   }
 }
