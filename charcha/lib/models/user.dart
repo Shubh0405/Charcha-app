@@ -10,7 +10,7 @@ class User {
 
   User(
       {required this.userId,
-      required this.userProfileId,
+      this.userProfileId = "",
       required this.userName,
       required this.fullName,
       this.profilePic = "",
