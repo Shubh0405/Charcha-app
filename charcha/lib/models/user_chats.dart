@@ -5,8 +5,9 @@ class UserChats {
   final bool isPersonalChat;
   final String chatProfilePic;
   final String chatName;
-  final Message latestMessage;
+  final String latestMessage;
   final String latestMessageSender;
+  final String latestMessageTime;
   final bool readByAll;
 
   UserChats(
@@ -16,5 +17,6 @@ class UserChats {
       required this.chatName,
       required this.latestMessage,
       required this.latestMessageSender,
+      required this.latestMessageTime,
       required this.readByAll});
 }
