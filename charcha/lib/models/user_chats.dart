@@ -1,5 +1,3 @@
-import 'package:charcha/models/message.dart';
-
 class UserChats {
   final String chatId;
   final bool isPersonalChat;

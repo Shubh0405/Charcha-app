@@ -1,4 +1,3 @@
-import 'package:charcha/models/message.dart';
 import 'package:charcha/models/user_chats.dart';
 import 'package:charcha/res/shared_preferences_strings.dart';
 import 'package:charcha/usecases/charcha_usecases.dart';

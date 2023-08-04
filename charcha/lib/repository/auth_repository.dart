@@ -62,8 +62,6 @@ class AuthRepository {
   static Future<bool> checkIfEmailExists(String email) async {
     final response = await AuthService.checkEmailExists(email);
 
-    print(response);
-
     if (response["data"]["emailInUse"]) {
       return true;
     } else {
