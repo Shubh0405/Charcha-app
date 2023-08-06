@@ -1,9 +1,13 @@
 import 'package:charcha/res/shared_preferences_strings.dart';
 import 'package:charcha/screen/search_screen.dart';
 import 'package:charcha/services/user_service.dart';
+import 'package:charcha/widgets/chat_list.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../cubits/user_chat_cubit.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -20,6 +24,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   void initState() {
     super.initState();
     _loadData();
+    _loadChats();
     _tabController = TabController(initialIndex: 0, length: 2, vsync: this);
   }
 
@@ -29,6 +34,10 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     setState(() {
       profilePic = fetchedProfilePic;
     });
+  }
+
+  Future<void> _loadChats() async {
+    await BlocProvider.of<UserChatCubit>(context).loadUserChats();
   }
 
   @override
@@ -98,9 +107,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             ]),
       ),
       body: TabBarView(controller: _tabController, children: [
-        Center(
-          child: Text('Chat Screen'),
-        ),
+        ChatList(),
         Center(
           child: Text('Calls Screen'),
         )

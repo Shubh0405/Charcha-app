@@ -12,13 +12,15 @@ class UserChatCubit extends Cubit<UIState> {
     try {
       final chatResponse = await UserService.getUserChats();
       print("Inside Cubit");
-      print(chatResponse);
 
-      List<UserChats> userChats = await ChatListUseCase()
-          .execute(chatResponse["data"] as List<Map<String, dynamic>>);
+      List<UserChats> userChats =
+          await ChatListUseCase().execute(chatResponse["data"]);
 
-      emit(SuccessState(userChats));
+      print(userChats);
+
+      emit(SuccessState<List<UserChats>>(userChats));
     } catch (e) {
+      print(e);
       emit(FailureState(
           UiError(message: "Some error occured! Couldn't load the messages!")));
     }

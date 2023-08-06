@@ -1,3 +1,4 @@
+import 'package:charcha/cubits/user_chat_cubit.dart';
 import 'package:charcha/cubits/user_cubit.dart';
 import 'package:charcha/screen/click_email.dart';
 import 'package:charcha/screen/home_page.dart';
@@ -29,7 +30,8 @@ class _MyAppState extends State<MyApp> {
           BlocProvider<AuthBloc>(
             create: (context) => AuthBloc()..checkAuthStatus(),
           ),
-          BlocProvider<UserBloc>(create: (context) => UserBloc())
+          BlocProvider<UserBloc>(create: (context) => UserBloc()),
+          BlocProvider<UserChatCubit>(create: (context) => UserChatCubit())
         ],
         child: BlocBuilder<AuthBloc, AuthStatus>(
           builder: (context, state) {
@@ -43,7 +45,7 @@ class _MyAppState extends State<MyApp> {
 
             return MaterialApp(
                 title: 'Flutter Demo',
-                themeMode: ThemeMode.dark,
+                themeMode: ThemeMode.light,
                 theme: MyThemes.lightTheme,
                 darkTheme: MyThemes.darkTheme,
                 scaffoldMessengerKey: snackbarKey,

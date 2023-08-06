@@ -5,11 +5,15 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class ChatListUseCase implements IChatListUseCase {
   @override
-  Future<List<UserChats>> execute(List<Map<String, dynamic>> input) async {
+  Future<List<UserChats>> execute(List<dynamic> input) async {
+    print("INSIDE USECASE");
+
     List<UserChats> userChatsList = [];
 
     final prefs = await SharedPreferences.getInstance();
-    final userId = prefs.getString(prefs_string_user_id);
+    String? userId = prefs.getString(prefs_string_user_id);
+
+    print(userId);
 
     for (var chat in input) {
       String chatId = chat["_id"];
@@ -23,7 +27,7 @@ class ChatListUseCase implements IChatListUseCase {
         chatProfilePic =
             (chat.containsKey("groupIcon")) ? chat["groupIcon"] : "";
       } else {
-        for (Map<String, String> member in chat["members"]) {
+        for (var member in chat["members"]) {
           if (member["user"] != userId) {
             chatName = member["fullName"]!;
             chatProfilePic =
@@ -60,6 +64,9 @@ class ChatListUseCase implements IChatListUseCase {
 
       userChatsList.add(userChat);
     }
+
+    print("CHATLIST INSIDE USECASE ====>");
+    print(userChatsList);
 
     return userChatsList;
   }
