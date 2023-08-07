@@ -35,7 +35,19 @@ class UserService {
 
     final decodedResponse = await http.Response.fromStream(response);
 
-    print(json.decode(decodedResponse.body));
+    return json.decode(decodedResponse.body);
+  }
+
+  static Future<Map<String, dynamic>> getChatMessages(String chatId) async {
+    final http.Request request = http.Request(
+      'GET',
+      Uri.parse('$baseUrl/messages/chat/$chatId'),
+    );
+
+    final http.StreamedResponse response =
+        await AuthMiddleware.handleRequest(request);
+
+    final decodedResponse = await http.Response.fromStream(response);
 
     return json.decode(decodedResponse.body);
   }

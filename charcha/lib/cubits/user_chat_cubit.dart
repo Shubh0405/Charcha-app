@@ -22,7 +22,7 @@ class UserChatCubit extends Cubit<UIState> {
     } catch (e) {
       print(e);
       emit(FailureState(
-          UiError(message: "Some error occured! Couldn't load the messages!")));
+          UiError(message: "Some error occured! Couldn't load the chats!")));
     }
   }
 }

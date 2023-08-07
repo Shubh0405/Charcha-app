@@ -23,6 +23,7 @@ class AuthRepository {
     if (userProfile == Null) {
       return {"Profile": false};
     } else {
+      prefs.setString(prefs_string_user_profile_id, userProfile["_id"]);
       prefs.setString(prefs_string_username, userProfile["username"]);
       prefs.setString(prefs_string_fullname, userProfile["fullName"]);
       prefs.setString(prefs_string_profile_pic, userProfile["profilePic"]);
@@ -40,8 +41,8 @@ class AuthRepository {
 
     await AuthService.logout(refreshToken!);
 
-    prefs.remove('access_token');
-    prefs.remove('refresh_token');
+    prefs.remove(prefs_string_access_token);
+    prefs.remove(prefs_string_refresh_token);
   }
 
   static Future<bool> newAccessToken() async {

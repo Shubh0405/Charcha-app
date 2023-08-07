@@ -6,14 +6,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 class ChatListUseCase implements IChatListUseCase {
   @override
   Future<List<UserChats>> execute(List<dynamic> input) async {
-    print("INSIDE USECASE");
-
     List<UserChats> userChatsList = [];
 
     final prefs = await SharedPreferences.getInstance();
     String? userId = prefs.getString(prefs_string_user_id);
-
-    print(userId);
 
     for (var chat in input) {
       String chatId = chat["_id"];
@@ -64,9 +60,6 @@ class ChatListUseCase implements IChatListUseCase {
 
       userChatsList.add(userChat);
     }
-
-    print("CHATLIST INSIDE USECASE ====>");
-    print(userChatsList);
 
     return userChatsList;
   }

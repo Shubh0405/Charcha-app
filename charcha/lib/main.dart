@@ -9,6 +9,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'cubits/auth_cubit.dart';
+import 'cubits/chat_messages_cubit.dart';
 
 void main() async {
   await dotenv.load(fileName: '.env');
@@ -31,7 +32,9 @@ class _MyAppState extends State<MyApp> {
             create: (context) => AuthBloc()..checkAuthStatus(),
           ),
           BlocProvider<UserBloc>(create: (context) => UserBloc()),
-          BlocProvider<UserChatCubit>(create: (context) => UserChatCubit())
+          BlocProvider<UserChatCubit>(create: (context) => UserChatCubit()),
+          BlocProvider<ChatMessagesCubit>(
+              create: (context) => ChatMessagesCubit())
         ],
         child: BlocBuilder<AuthBloc, AuthStatus>(
           builder: (context, state) {
