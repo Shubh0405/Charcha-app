@@ -6,7 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ChatList extends StatefulWidget {
-  const ChatList({super.key});
+  final Function loadChats;
+
+  const ChatList({super.key, required this.loadChats});
 
   @override
   State<ChatList> createState() => _ChatListState();
@@ -28,14 +30,18 @@ class _ChatListState extends State<ChatList> {
               UserChats userChat = state.data[index];
 
               return GestureDetector(
-                onTap: () {
-                  Navigator.push(
+                onTap: () async {
+                  await Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => ChatScreen(
-                              chatId: userChat.chatId,
-                              chatProfilePic: userChat.chatProfilePic,
-                              chatName: userChat.chatName)));
+                        builder: (context) => ChatScreen(
+                            chatId: userChat.chatId,
+                            chatProfilePic: userChat.chatProfilePic,
+                            chatName: userChat.chatName),
+                      )).then((value) {
+                    print("Chat Screen Poped!");
+                    widget.loadChats();
+                  });
                 },
                 child: ListTile(
                   leading: CircleAvatar(
@@ -58,6 +64,7 @@ class _ChatListState extends State<ChatList> {
                         : '${userChat.latestMessage}',
                     style: TextStyle(
                         color: Theme.of(context).colorScheme.onBackground),
+                    maxLines: 1,
                   ),
                   trailing: Column(
                     mainAxisSize: MainAxisSize.max,

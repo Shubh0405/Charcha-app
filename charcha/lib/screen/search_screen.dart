@@ -20,8 +20,6 @@ class _SearchScreenState extends State<SearchScreen> {
     Map<String, dynamic> searchResponse = await UserService.searchUser(value);
     List<User> userList = [];
 
-    print(searchResponse);
-
     if (searchResponse["data"] != [] || searchResponse["data"] != null) {
       for (Map<String, dynamic> user in searchResponse["data"]) {
         User userData = User(

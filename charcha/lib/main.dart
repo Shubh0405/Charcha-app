@@ -2,6 +2,7 @@ import 'package:charcha/cubits/user_chat_cubit.dart';
 import 'package:charcha/cubits/user_cubit.dart';
 import 'package:charcha/screen/click_email.dart';
 import 'package:charcha/screen/home_page.dart';
+import 'package:charcha/sockets/socket.dart';
 import 'package:charcha/theme/theme.dart';
 import 'package:charcha/utils/globals.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +14,7 @@ import 'cubits/chat_messages_cubit.dart';
 
 void main() async {
   await dotenv.load(fileName: '.env');
+  SocketSingleton().setupSocketConnection();
   runApp(const MyApp());
 }
 

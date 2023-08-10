@@ -1,6 +1,8 @@
 import 'package:charcha/res/shared_preferences_strings.dart';
+import 'package:charcha/res/socket_constants.dart';
 import 'package:charcha/screen/search_screen.dart';
 import 'package:charcha/services/user_service.dart';
+import 'package:charcha/sockets/socket.dart';
 import 'package:charcha/widgets/chat_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,6 +19,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
+  final socket = SocketSingleton().socket;
   String profilePic = '';
   late TabController _tabController;
 
@@ -25,7 +28,15 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     super.initState();
     _loadData();
     _loadChats();
+    _connectSocket();
     _tabController = TabController(initialIndex: 0, length: 2, vsync: this);
+  }
+
+  Future<void> _connectSocket() async {
+    final prefs = await SharedPreferences.getInstance();
+    String? userProfileId = prefs.getString(prefs_string_user_profile_id);
+
+    socket.emit(socket_event_setup, userProfileId);
   }
 
   Future<void> _loadData() async {
@@ -107,7 +118,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             ]),
       ),
       body: TabBarView(controller: _tabController, children: [
-        ChatList(),
+        ChatList(
+          loadChats: _loadChats,
+        ),
         Center(
           child: Text('Calls Screen'),
         )

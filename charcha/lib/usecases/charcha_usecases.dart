@@ -6,3 +6,6 @@ abstract class IChatListUseCase
 
 abstract class IMessageListUseCase
     implements IUseCaseAsync<List<dynamic>, List<dynamic>> {}
+
+abstract class IAddMessageUseCase
+    implements IUseCaseAsync<Map<String, dynamic>, List<dynamic>> {}

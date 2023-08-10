@@ -39,12 +39,6 @@ class MessageListUseCase implements IMessageListUseCase {
           userName: message["from"]["username"],
           fullName: message["from"]["fullName"]);
 
-      print("USECASE SENDER ID");
-      print(senderId);
-
-      print("USECASE USERID");
-      print(userProfileId);
-
       bool sendByMe = false;
       if (senderId == userProfileId) {
         sendByMe = true;
