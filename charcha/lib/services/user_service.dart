@@ -53,20 +53,37 @@ class UserService {
   }
 
   static Future<Map<String, dynamic>> sendMessage(
-      String chatId, String content) async {
+      String chatId, String content, String? parentMessageId) async {
     final http.Request request = http.Request(
       'POST',
       Uri.parse('$baseUrl/messages/'),
     );
 
-    final body = jsonEncode({'chat': chatId, 'message': content});
+    final body = jsonEncode(
+        {'chat': chatId, 'message': content, "parentMessage": parentMessageId});
 
     request.body = body;
     request.headers['Content-Type'] = 'application/json';
 
-    print(request.url);
-    print(request.method);
-    print(request.body);
+    final http.StreamedResponse response =
+        await AuthMiddleware.handleRequest(request);
+
+    final decodedResponse = await http.Response.fromStream(response);
+
+    return json.decode(decodedResponse.body);
+  }
+
+  static Future<Map<String, dynamic>> createNewChat(
+      String userId, String content) async {
+    final http.Request request = http.Request(
+      'POST',
+      Uri.parse('$baseUrl/chats/createPersonalChat'),
+    );
+
+    final body = jsonEncode({'toUser': userId, 'message': content});
+
+    request.body = body;
+    request.headers['Content-Type'] = 'application/json';
 
     final http.StreamedResponse response =
         await AuthMiddleware.handleRequest(request);

@@ -1,3 +1,4 @@
+import 'package:charcha/models/message.dart';
 import 'package:charcha/res/shared_preferences_strings.dart';
 import 'package:charcha/res/socket_constants.dart';
 import 'package:charcha/screen/search_screen.dart';
@@ -29,7 +30,15 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     _loadData();
     _loadChats();
     _connectSocket();
+    _listenChatSockets();
     _tabController = TabController(initialIndex: 0, length: 2, vsync: this);
+  }
+
+  @override
+  void dispose() {
+    // Unsubscribe from socket events when disposing
+    socket.off(socket_event_new_message);
+    super.dispose();
   }
 
   Future<void> _connectSocket() async {
@@ -37,6 +46,13 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     String? userProfileId = prefs.getString(prefs_string_user_profile_id);
 
     socket.emit(socket_event_setup, userProfileId);
+  }
+
+  Future<void> _listenChatSockets() async {
+    socket.on(socket_event_new_message, (message) async {
+      print("New message received!");
+      await _loadChats();
+    });
   }
 
   Future<void> _loadData() async {
@@ -70,9 +86,10 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             icon: Icon(Icons.search),
             onPressed: () {
               Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const SearchScreen()));
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const SearchScreen()))
+                  .then((value) => _loadChats());
             },
             splashColor: Colors.transparent,
           ),

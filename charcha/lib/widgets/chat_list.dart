@@ -39,7 +39,6 @@ class _ChatListState extends State<ChatList> {
                             chatProfilePic: userChat.chatProfilePic,
                             chatName: userChat.chatName),
                       )).then((value) {
-                    print("Chat Screen Poped!");
                     widget.loadChats();
                   });
                 },

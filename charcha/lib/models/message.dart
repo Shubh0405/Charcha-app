@@ -7,6 +7,10 @@ class Message {
   final bool sendByMe;
   final String messageDate;
   final String messageTime;
+  final String? parentMessageId;
+  final String? parentMessageSenderId;
+  final String? parentMessageSenderName;
+  final String? parentMessageContent;
   String content;
   List<dynamic> readBy;
   bool isDeletedForMe;
@@ -24,5 +28,9 @@ class Message {
       required this.readBy,
       this.isDeletedForMe = false,
       this.isDeleted = false,
-      this.isEdited = false});
+      this.isEdited = false,
+      this.parentMessageId,
+      this.parentMessageSenderId,
+      this.parentMessageSenderName,
+      this.parentMessageContent});
 }

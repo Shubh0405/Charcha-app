@@ -56,6 +56,20 @@ class MessageListUseCase implements IMessageListUseCase {
       bool isEdited = message["isEdited"];
       bool isDeleted = message["isDeleted"];
 
+      String? parentMessageId;
+      String? parentMessageContent;
+      String? parentMessageSenderId;
+      String? parentMessageSenderName;
+
+      if (message["parentMessage"] != null) {
+        parentMessageId = message["parentMessage"]["_id"];
+        parentMessageContent = message["parentMessage"]["content"];
+        parentMessageSenderId = message["parentMessage"]["from"]["_id"];
+        parentMessageSenderName = parentMessageSenderId == userProfileId
+            ? 'You'
+            : message["parentMessage"]["from"]["fullName"];
+      }
+
       Message messageObject = Message(
           messageId: messageId,
           chatId: chatId,
@@ -67,7 +81,11 @@ class MessageListUseCase implements IMessageListUseCase {
           readBy: readBy,
           isDeleted: isDeleted,
           isDeletedForMe: isDeletedForMe,
-          isEdited: isEdited);
+          isEdited: isEdited,
+          parentMessageContent: parentMessageContent,
+          parentMessageId: parentMessageId,
+          parentMessageSenderId: parentMessageSenderId,
+          parentMessageSenderName: parentMessageSenderName);
 
       messageList.add(messageObject);
     }

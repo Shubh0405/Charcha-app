@@ -33,6 +33,9 @@ class _ChatScreenState extends State<ChatScreen> {
   List<dynamic> messagesList = [];
   bool? newChat;
   String? initChatId;
+  String? markedParentMessageId;
+  String? markedParentMessageContent;
+  String? markedParentMessageSender;
 
   @override
   void initState() {
@@ -66,10 +69,11 @@ class _ChatScreenState extends State<ChatScreen> {
     Map<String, dynamic> newMessage;
     try {
       if (newChat == false) {
-        newMessage =
-            await UserService.sendMessage(initChatId!, _textController.text);
+        newMessage = await UserService.sendMessage(
+            initChatId!, _textController.text, markedParentMessageId);
       } else {
-        newMessage = {};
+        newMessage = await UserService.createNewChat(
+            widget.userId, _textController.text);
       }
     } catch (e) {
       print(e);
@@ -82,7 +86,7 @@ class _ChatScreenState extends State<ChatScreen> {
     }
 
     newMessage["data"]["lastMessage"] =
-        (newChat == true) ? null : messagesList.last.messageDate;
+        (newChat == true) ? getPreviousDate() : messagesList.last.messageDate;
 
     List<dynamic> newMessageList =
         await AddMessageUseCase().execute(newMessage["data"]);
@@ -90,7 +94,13 @@ class _ChatScreenState extends State<ChatScreen> {
     setState(() {
       messagesList.addAll(newMessageList);
       _textController.clear();
+      markedParentMessageId = null;
+      markedParentMessageContent = null;
+      markedParentMessageSender = null;
     });
+
+    initChatId = newMessage["data"]["chat"];
+    newChat = false;
   }
 
   Future<void> _listenChatSockets() async {
@@ -107,6 +117,24 @@ class _ChatScreenState extends State<ChatScreen> {
         });
       }
     });
+  }
+
+  void messageSwipeAction(
+      String messageId, String messageSender, String messageContent) {
+    setState(() {
+      markedParentMessageId = messageId;
+      markedParentMessageContent = messageContent;
+      markedParentMessageSender = messageSender;
+    });
+  }
+
+  String getPreviousDate() {
+    final currentDate = DateTime.now();
+    final previousDate = currentDate.subtract(Duration(days: 1));
+    final day = previousDate.day.toString();
+    final month = previousDate.month.toString();
+    final year = previousDate.year.toString();
+    return '$day/$month/$year';
   }
 
   @override
@@ -158,44 +186,138 @@ class _ChatScreenState extends State<ChatScreen> {
       }, builder: (context, state) {
         return Column(
           children: [
-            Expanded(child: MessagesList(messagesList: messagesList)),
+            Expanded(
+                child: MessagesList(
+              messagesList: messagesList,
+              messageSwipeAction: messageSwipeAction,
+            )),
             Align(
               alignment: Alignment.bottomCenter,
               child: Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.only(
+                    left: 8.0, right: 8.0, bottom: 8.0, top: 2.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    Container(
-                      margin: const EdgeInsets.only(left: 10, right: 10),
-                      decoration: BoxDecoration(
-                        color: Theme.of(context)
-                            .colorScheme
-                            .surface, // Set the background color
-                        borderRadius:
-                            BorderRadius.circular(8), // Set the border radius
-                      ),
-                      child: ConstrainedBox(
-                        constraints: BoxConstraints(
-                            maxHeight: 150, maxWidth: deviceWidth * 0.8),
-                        child: TextFormField(
-                          controller: _textController,
-                          maxLines: null,
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyMedium
-                              ?.copyWith(
+                    Column(
+                      children: [
+                        markedParentMessageId != null
+                            ? Container(
+                                margin:
+                                    const EdgeInsets.only(left: 10, right: 10),
+                                // padding: const EdgeInsets.all(5),
+                                decoration: BoxDecoration(
                                   color: Theme.of(context)
                                       .colorScheme
-                                      .onSurface), // Set the text color
-                          decoration: const InputDecoration(
-                              border: InputBorder.none,
-                              contentPadding: EdgeInsets.all(10),
-                              labelText: 'Message',
-                              labelStyle: TextStyle(color: Colors.grey)),
+                                      .surfaceVariant,
+                                  borderRadius: const BorderRadius.only(
+                                      topLeft: Radius.circular(8),
+                                      topRight: Radius.circular(8)),
+                                ),
+                                child: ConstrainedBox(
+                                  constraints: BoxConstraints(
+                                      maxWidth: deviceWidth * 0.8),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              markedParentMessageSender!,
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodySmall
+                                                  ?.copyWith(
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                      color: Theme.of(context)
+                                                          .colorScheme
+                                                          .onSurfaceVariant),
+                                            ),
+                                            InkWell(
+                                              radius: 50,
+                                              onTap: () {
+                                                setState(() {
+                                                  markedParentMessageId = null;
+                                                  markedParentMessageContent =
+                                                      null;
+                                                  markedParentMessageSender =
+                                                      null;
+                                                });
+                                              },
+                                              child: Text(
+                                                'X',
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodySmall
+                                                    ?.copyWith(
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                        color: Theme.of(context)
+                                                            .colorScheme
+                                                            .onSurfaceVariant),
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                        const SizedBox(
+                                          height: 5,
+                                        ),
+                                        Text(markedParentMessageContent!,
+                                            maxLines: 1,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodySmall
+                                                ?.copyWith(
+                                                    color: Theme.of(context)
+                                                        .colorScheme
+                                                        .onSurfaceVariant))
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              )
+                            : const SizedBox.shrink(),
+                        Container(
+                          margin: const EdgeInsets.only(left: 10, right: 10),
+                          decoration: BoxDecoration(
+                            color: Theme.of(context)
+                                .colorScheme
+                                .surface, // Set the background color
+                            borderRadius: markedParentMessageId == null
+                                ? BorderRadius.circular(8)
+                                : const BorderRadius.only(
+                                    bottomLeft: Radius.circular(8),
+                                    bottomRight: Radius.circular(8)),
+                          ),
+                          child: ConstrainedBox(
+                            constraints: BoxConstraints(
+                                maxHeight: 150, maxWidth: deviceWidth * 0.8),
+                            child: TextFormField(
+                              controller: _textController,
+                              maxLines: null,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium
+                                  ?.copyWith(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onSurface), // Set the text color
+                              decoration: const InputDecoration(
+                                  border: InputBorder.none,
+                                  contentPadding: EdgeInsets.all(10),
+                                  labelText: 'Message',
+                                  labelStyle: TextStyle(color: Colors.grey)),
+                            ),
+                          ),
                         ),
-                      ),
+                      ],
                     ),
                     Padding(
                       padding: const EdgeInsets.only(bottom: 5),

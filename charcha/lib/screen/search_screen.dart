@@ -1,4 +1,5 @@
 import 'package:charcha/models/user.dart';
+import 'package:charcha/screen/chat_screen.dart';
 import 'package:charcha/services/user_service.dart';
 import 'package:flutter/material.dart';
 
@@ -82,6 +83,15 @@ class _SearchScreenState extends State<SearchScreen> {
                     itemBuilder: (context, index) {
                       var user = _searchResult[index];
                       return ListTile(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => ChatScreen(
+                                      userId: user.userId,
+                                      chatProfilePic: user.profilePic,
+                                      chatName: user.fullName)));
+                        },
                         leading: CircleAvatar(
                           backgroundImage:
                               (user.profilePic != "" && user.profilePic != null)
@@ -111,9 +121,6 @@ class _SearchScreenState extends State<SearchScreen> {
                               .bodySmall
                               ?.copyWith(color: Colors.grey),
                         ),
-                        onTap: () {
-                          // redirect to chat screen
-                        },
                       );
                     }))
           ],

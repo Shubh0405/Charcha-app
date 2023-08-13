@@ -15,9 +15,6 @@ class AddMessageUseCase implements IAddMessageUseCase {
     final lastDate = input["lastMessage"];
     String currentDate = formatDate(input["createdAt"]);
 
-    print(lastDate);
-    print(currentDate);
-
     if (lastDate == null || (lastDate != null && lastDate != currentDate)) {
       ChatAlerts alert = ChatAlerts(alert: currentDate);
       messageList.add(alert);
@@ -45,6 +42,20 @@ class AddMessageUseCase implements IAddMessageUseCase {
     bool isEdited = input["isEdited"];
     bool isDeleted = input["isDeleted"];
 
+    String? parentMessageId;
+    String? parentMessageContent;
+    String? parentMessageSenderId;
+    String? parentMessageSenderName;
+
+    if (input["parentMessage"] != null) {
+      parentMessageId = input["parentMessage"]["_id"];
+      parentMessageContent = input["parentMessage"]["content"];
+      parentMessageSenderId = input["parentMessage"]["from"]["_id"];
+      parentMessageSenderName = parentMessageSenderId == userProfileId
+          ? 'You'
+          : input["parentMessage"]["from"]["fullName"];
+    }
+
     Message messageObject = Message(
         messageId: messageId,
         chatId: chatId,
@@ -56,7 +67,11 @@ class AddMessageUseCase implements IAddMessageUseCase {
         readBy: readBy,
         isDeleted: isDeleted,
         isDeletedForMe: isDeletedForMe,
-        isEdited: isEdited);
+        isEdited: isEdited,
+        parentMessageContent: parentMessageContent,
+        parentMessageId: parentMessageId,
+        parentMessageSenderId: parentMessageSenderId,
+        parentMessageSenderName: parentMessageSenderName);
 
     messageList.add(messageObject);
 
