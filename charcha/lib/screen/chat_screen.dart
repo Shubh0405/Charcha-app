@@ -1,14 +1,16 @@
 import 'package:charcha/cubits/chat_messages_cubit.dart';
-import 'package:charcha/models/message.dart';
+import 'package:charcha/res/shared_preferences_strings.dart';
 import 'package:charcha/res/socket_constants.dart';
 import 'package:charcha/res/ui_states.dart';
 import 'package:charcha/services/user_service.dart';
 import 'package:charcha/sockets/socket.dart';
 import 'package:charcha/usecases/add_message_usecase.dart';
+import 'package:charcha/usecases/message_read_usecase.dart';
 import 'package:charcha/utils/globals.dart';
 import 'package:charcha/widgets/messages_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ChatScreen extends StatefulWidget {
   final String chatId;
@@ -52,7 +54,7 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   void dispose() {
     // Unsubscribe from socket events when disposing
-    socket.off(socket_event_new_message);
+    // socket.off(socket_event_new_message);
     super.dispose();
   }
 
@@ -104,6 +106,9 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   Future<void> _listenChatSockets() async {
+    final prefs = await SharedPreferences.getInstance();
+    String? userProfileId = prefs.getString(prefs_string_user_profile_id);
+
     socket.on(socket_event_new_message, (message) async {
       if (message["chat"] == initChatId) {
         message["lastMessage"] =
@@ -111,10 +116,25 @@ class _ChatScreenState extends State<ChatScreen> {
 
         List<dynamic> newMessageList =
             await AddMessageUseCase().execute(message);
+        if (mounted) {
+          setState(() {
+            messagesList.addAll(newMessageList);
+          });
+          socket
+              .emit(socket_event_message_read, [userProfileId, message["_id"]]);
+        }
+      }
+    });
 
-        setState(() {
-          messagesList.addAll(newMessageList);
-        });
+    socket.on(socket_event_message_read_by_all, (messageData) async {
+      if (messageData['chatId'] == initChatId) {
+        if (mounted) {
+          List<dynamic> newMessageReadList = MessageReadUseCase()
+              .execute(messagesList, messageData["messageId"]);
+          setState(() {
+            messagesList = newMessageReadList;
+          });
+        }
       }
     });
   }

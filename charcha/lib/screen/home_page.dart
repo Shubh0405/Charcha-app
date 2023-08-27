@@ -30,16 +30,16 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     _loadData();
     _loadChats();
     _connectSocket();
-    _listenChatSockets();
+    // _listenChatSockets();
     _tabController = TabController(initialIndex: 0, length: 2, vsync: this);
   }
 
-  @override
-  void dispose() {
-    // Unsubscribe from socket events when disposing
-    socket.off(socket_event_new_message);
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   // Unsubscribe from socket events when disposing
+  //   socket.off(socket_event_new_message);
+  //   super.dispose();
+  // }
 
   Future<void> _connectSocket() async {
     final prefs = await SharedPreferences.getInstance();
@@ -48,12 +48,13 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     socket.emit(socket_event_setup, userProfileId);
   }
 
-  Future<void> _listenChatSockets() async {
-    socket.on(socket_event_new_message, (message) async {
-      print("New message received!");
-      await _loadChats();
-    });
-  }
+  // Future<void> _listenChatSockets() async {
+  //   print("Load chat socket!");
+  //   socket.on(socket_event_new_message, (message) async {
+  //     print(message);
+  //     await BlocProvider.of<UserChatCubit>(context).updateUserChatList(message);
+  //   });
+  // }
 
   Future<void> _loadData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -137,6 +138,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       body: TabBarView(controller: _tabController, children: [
         ChatList(
           loadChats: _loadChats,
+          // loadChatSockets: _listenChatSockets,
         ),
         Center(
           child: Text('Calls Screen'),

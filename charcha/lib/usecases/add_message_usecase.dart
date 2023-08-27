@@ -37,6 +37,7 @@ class AddMessageUseCase implements IAddMessageUseCase {
     String messageTime = formatTime(input["createdAt"]);
     String content = input["content"];
     List<dynamic> readBy = input["readBy"];
+    bool readByAll = false;
 
     bool isDeletedForMe = false;
     bool isEdited = input["isEdited"];
@@ -65,6 +66,7 @@ class AddMessageUseCase implements IAddMessageUseCase {
         messageTime: messageTime,
         content: content,
         readBy: readBy,
+        readByAll: readByAll,
         isDeleted: isDeleted,
         isDeletedForMe: isDeletedForMe,
         isEdited: isEdited,

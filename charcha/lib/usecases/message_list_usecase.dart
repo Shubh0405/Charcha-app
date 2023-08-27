@@ -47,6 +47,7 @@ class MessageListUseCase implements IMessageListUseCase {
       String messageTime = formatTime(message["createdAt"]);
       String content = message["content"];
       List<dynamic> readBy = message["readBy"];
+      bool readByAll = message["readByAll"];
 
       bool isDeletedForMe = false;
       if ((message["isDeletedForMe"] as List).contains(userProfileId)) {
@@ -79,6 +80,7 @@ class MessageListUseCase implements IMessageListUseCase {
           messageTime: messageTime,
           content: content,
           readBy: readBy,
+          readByAll: readByAll,
           isDeleted: isDeleted,
           isDeletedForMe: isDeletedForMe,
           isEdited: isEdited,

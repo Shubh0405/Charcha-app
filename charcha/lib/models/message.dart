@@ -13,6 +13,7 @@ class Message {
   final String? parentMessageContent;
   String content;
   List<dynamic> readBy;
+  bool readByAll;
   bool isDeletedForMe;
   bool isDeleted;
   bool isEdited;
@@ -26,6 +27,7 @@ class Message {
       required this.messageTime,
       required this.content,
       required this.readBy,
+      required this.readByAll,
       this.isDeletedForMe = false,
       this.isDeleted = false,
       this.isEdited = false,

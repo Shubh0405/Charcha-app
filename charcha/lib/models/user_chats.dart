@@ -3,10 +3,10 @@ class UserChats {
   final bool isPersonalChat;
   final String chatProfilePic;
   final String chatName;
-  final String latestMessage;
-  final String latestMessageSender;
-  final String latestMessageTime;
-  final bool readByAll;
+  String latestMessage;
+  String latestMessageSender;
+  String latestMessageTime;
+  bool readByAll;
 
   UserChats(
       {required this.chatId,

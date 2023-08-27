@@ -236,13 +236,31 @@ class MessageWidget extends StatelessWidget {
                   const SizedBox(
                     height: 5,
                   ),
-                  Text(
-                    message.messageTime.toString(),
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        fontSize: 8,
-                        color: message.sendByMe
-                            ? const Color.fromARGB(139, 255, 255, 255)
-                            : Colors.grey),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        message.messageTime.toString(),
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                            fontSize: 8,
+                            color: message.sendByMe
+                                ? const Color.fromARGB(139, 255, 255, 255)
+                                : Colors.grey),
+                      ),
+                      const SizedBox(
+                        width: 2,
+                      ),
+                      message.sendByMe
+                          ? Icon(
+                              Icons.check,
+                              size: 10,
+                              color: message.readByAll
+                                  ? Colors.white
+                                  : Colors.grey,
+                              weight: 50,
+                            )
+                          : const SizedBox.shrink()
+                    ],
                   )
                 ],
               ),

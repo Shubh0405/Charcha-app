@@ -1,12 +1,15 @@
 import 'package:charcha/cubits/user_chat_cubit.dart';
 import 'package:charcha/models/user_chats.dart';
+import 'package:charcha/res/socket_constants.dart';
 import 'package:charcha/res/ui_states.dart';
 import 'package:charcha/screen/chat_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:charcha/sockets/socket.dart';
 
 class ChatList extends StatefulWidget {
   final Function loadChats;
+  // final Function loadChatSockets;
 
   const ChatList({super.key, required this.loadChats});
 
@@ -15,10 +18,37 @@ class ChatList extends StatefulWidget {
 }
 
 class _ChatListState extends State<ChatList> {
+  final socket = SocketSingleton().socket;
+
+  @override
+  void dispose() {
+    // Unsubscribe from socket events when disposing
+    socket.off(socket_event_new_message);
+    socket.off(socket_event_message_read_by_all);
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _listenChatSockets();
+  }
+
+  Future<void> _listenChatSockets() async {
+    socket.on(socket_event_new_message, (message) async {
+      print(message);
+      await BlocProvider.of<UserChatCubit>(context).updateUserChatList(message);
+    });
+
+    socket.on(socket_event_message_read_by_all, (messageData) async {
+      print("Message Read socket event received");
+      print(messageData);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<UserChatCubit, UIState>(builder: (context, state) {
-      print(state);
       if (state is LoadingState) {
         return Center(
           child: CircularProgressIndicator(),
@@ -30,8 +60,9 @@ class _ChatListState extends State<ChatList> {
               UserChats userChat = state.data[index];
 
               return GestureDetector(
-                onTap: () async {
-                  await Navigator.push(
+                onTap: () {
+                  // socket.off(socket_event_new_message);
+                  Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (context) => ChatScreen(

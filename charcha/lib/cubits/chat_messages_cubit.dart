@@ -13,8 +13,6 @@ class ChatMessagesCubit extends Cubit<UIState> {
       final messageList =
           await MessageListUseCase().execute(messagesResponse["data"]);
 
-      print(messageList);
-
       emit(SuccessState<List<dynamic>>(messageList));
     } catch (e) {
       print(e);

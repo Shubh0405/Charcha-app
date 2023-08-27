@@ -54,6 +54,7 @@ class _MyAppState extends State<MyApp> {
                 theme: MyThemes.lightTheme,
                 darkTheme: MyThemes.darkTheme,
                 scaffoldMessengerKey: snackbarKey,
+                navigatorKey: navigatorKey,
                 home: initWidget);
           },
         ));
