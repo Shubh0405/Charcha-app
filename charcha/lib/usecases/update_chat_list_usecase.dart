@@ -12,6 +12,7 @@ class UpdateChatListUseCase implements IUpdateChatListUseCase {
 
     String latestMessageChatId = newMessage["chat"];
     String latestMessage = newMessage["content"];
+    String latestMessageId = newMessage["_id"];
     String latestMessageTime = formatDateOrTime(newMessage["createdAt"]);
 
     UserChats? updatedChat;
@@ -38,6 +39,8 @@ class UpdateChatListUseCase implements IUpdateChatListUseCase {
     updatedChat!.latestMessage = latestMessage;
     updatedChat!.latestMessageSender = latestMessageSender;
     updatedChat!.latestMessageTime = latestMessageTime;
+    updatedChat!.latestMessageId = latestMessageId;
+    updatedChat!.readByAll = false;
 
     initialUserChats.insert(0, updatedChat!);
 

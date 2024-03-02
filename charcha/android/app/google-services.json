@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "156613854294",
+    "project_id": "charcha-96389",
+    "storage_bucket": "charcha-96389.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:156613854294:android:7dbe3fe2d08f5fb8c727f7",
+        "android_client_info": {
+          "package_name": "com.example.charcha"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCAAU-EkCH9Q2xtmhUKAFBpKDLatX7EBaY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

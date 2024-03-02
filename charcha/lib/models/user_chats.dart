@@ -6,6 +6,7 @@ class UserChats {
   String latestMessage;
   String latestMessageSender;
   String latestMessageTime;
+  String latestMessageId;
   bool readByAll;
 
   UserChats(
@@ -16,5 +17,6 @@ class UserChats {
       required this.latestMessage,
       required this.latestMessageSender,
       required this.latestMessageTime,
+      required this.latestMessageId,
       required this.readByAll});
 }

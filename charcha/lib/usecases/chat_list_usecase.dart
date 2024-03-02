@@ -33,6 +33,7 @@ class ChatListUseCase implements IChatListUseCase {
       }
 
       String latestMessage = chat["latestMessage"]["content"];
+      String latestMessageId = chat["latestMessage"]["_id"];
       String latestMessageSender =
           (chat["latestMessage"]["from"]["user"] == userId)
               ? 'You'
@@ -43,8 +44,8 @@ class ChatListUseCase implements IChatListUseCase {
       String latestMessageTime =
           formatDateOrTime(chat["latestMessage"]["createdAt"]);
 
-      bool readByAll = ((chat["latestMessage"]["readBy"] as List).length ==
-              ((chat["members"] as List).length - 1))
+      bool readByAll = (chat["latestMessage"]["readBy"] as List).length ==
+              (chat["members"] as List).length
           ? true
           : false;
 
@@ -56,6 +57,7 @@ class ChatListUseCase implements IChatListUseCase {
           latestMessage: latestMessage,
           latestMessageSender: latestMessageSender,
           latestMessageTime: latestMessageTime,
+          latestMessageId: latestMessageId,
           readByAll: readByAll);
 
       userChatsList.add(userChat);

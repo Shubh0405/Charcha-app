@@ -1,10 +1,12 @@
 import 'package:charcha/cubits/user_chat_cubit.dart';
 import 'package:charcha/cubits/user_cubit.dart';
+import 'package:charcha/firebase/firebase_api.dart';
 import 'package:charcha/screen/click_email.dart';
 import 'package:charcha/screen/home_page.dart';
 import 'package:charcha/sockets/socket.dart';
 import 'package:charcha/theme/theme.dart';
 import 'package:charcha/utils/globals.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -13,8 +15,11 @@ import 'cubits/auth_cubit.dart';
 import 'cubits/chat_messages_cubit.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: '.env');
   SocketSingleton().setupSocketConnection();
+  await Firebase.initializeApp();
+  await FirebaseApi().initNotifications();
   runApp(const MyApp());
 }
 
